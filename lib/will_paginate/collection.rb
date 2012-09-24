@@ -123,7 +123,7 @@ module WillPaginate
     # in +create+.
     def replace(array)
       result = super
-      
+
       # The collection is shorter then page limit? Rejoice, because
       # then we know that we are on the last page!
       if total_entries.nil? and length < per_page and (current_page == 1 or length > 0)
@@ -132,5 +132,18 @@ module WillPaginate
 
       result
     end
+
+    attr_accessor :member_class, :origin, :origin_attribute
+
+    # Hobo extension:  make paginate_by_sql, etc. carry metadata
+    def replace_with_hobo_metadata(array)
+      result = replace_without_hobo_metadata(array)
+      self.member_class = array.try.member_class
+      self.origin = array.try.origin
+      self.origin_attribute = array.try.origin_attribute
+      result
+    end
+    alias_method_chain :replace, :hobo_metadata
+
   end
 end

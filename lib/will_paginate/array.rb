@@ -30,4 +30,28 @@ class Array
       pager.replace self[pager.offset, pager.per_page].to_a
     end
   end
+
+  attr_accessor :member_class, :origin, :origin_attribute
+
+  # Hobo Extension
+  def to_url_path
+    base_path = origin.try.to_url_path
+    "#{base_path}/#{origin_attribute}" unless base_path.blank?
+  end
+
+  # Hobo Extension
+  def typed_id
+    origin and origin_id = origin.try.typed_id and "#{origin_id}:#{origin_attribute}"
+  end
+
+  # Hobo Extension
+  def paginate_with_hobo_metadata(*args, &block)
+    collection = paginate_without_hobo_metadata(*args, &block)
+    collection.member_class     = member_class
+    collection.origin           = try.proxy_owner
+    collection.origin_attribute = try.proxy_association._?.reflection._?.name
+    collection
+  end
+  alias_method_chain :paginate, :hobo_metadata
+
 end
