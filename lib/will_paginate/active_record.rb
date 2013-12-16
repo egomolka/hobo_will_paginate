@@ -131,14 +131,13 @@ module WillPaginate
         options.delete(:page)
 
         rel = limit(per_page.to_i).page(pagenum)
-        rel = rel.apply_finder_options(options) if options.any?
         rel.wp_count_options = count_options    if count_options
         rel.total_entries = total.to_i          unless total.blank?
         rel
       end
 
       def page(num)
-        rel = scoped.extending(RelationMethods)
+        rel = self.extending(RelationMethods)
         pagenum = ::WillPaginate::PageNumber(num.nil? ? 1 : num)
         per_page = rel.limit_value || self.per_page
         rel = rel.offset(pagenum.to_offset(per_page).to_i)
