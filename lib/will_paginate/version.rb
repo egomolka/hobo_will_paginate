@@ -1,9 +1,9 @@
 module WillPaginate #:nodoc:
   module VERSION #:nodoc:
-    MAJOR = 3
-    MINOR = 0
-    TINY  = '4.hobo'
+    MAJOR = 2
+    MINOR = 1
+    TINY  = '0'
 
-    STRING = '3.0.4.hobo'
+    STRING = '2.1.0'
   end
 end
